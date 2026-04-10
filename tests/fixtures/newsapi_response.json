@@ -1,0 +1,27 @@
+{
+  "status": "ok",
+  "totalResults": 3,
+  "articles": [
+    {
+      "source": {"id": "reuters", "name": "Reuters"},
+      "title": "Tech stocks rally on strong earnings reports",
+      "description": "Major technology companies reported better-than-expected quarterly earnings.",
+      "url": "https://reuters.com/example",
+      "publishedAt": "2024-04-05T14:30:00Z"
+    },
+    {
+      "source": {"id": null, "name": "Bloomberg"},
+      "title": "Federal Reserve signals rate cuts later this year",
+      "description": "Fed officials indicated potential rate cuts pending further inflation data.",
+      "url": "https://bloomberg.com/example",
+      "publishedAt": "2024-04-05T12:00:00Z"
+    },
+    {
+      "source": {"id": "cnbc", "name": "CNBC"},
+      "title": "Apple $AAPL hits new 52-week high amid AI announcements",
+      "description": "Apple stock surged following announcements about AI integration into core products.",
+      "url": "https://cnbc.com/example",
+      "publishedAt": "2024-04-05T10:00:00Z"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+version: "3.9"
+
+services:
+
+  redis:
+    image: redis:7-alpine
+    container_name: invest_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  crew:
+    # Uses the Playwright image because the congress_tracker tool requires Chromium
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.playwright
+    container_name: invest_crew
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./logs:/app/logs
+      - ./memory/archives:/app/memory/archives
+    command: python scripts/run_crew.py
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app
+
+  memory_reset:
+    # Lightweight image — no Playwright needed for reset
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: invest_reset
+    env_file: .env
+    depends_on:
+      - redis
+    volumes:
+      - ./memory/archives:/app/memory/archives
+      - ./logs:/app/logs
+    command: python scripts/weekly_reset.py
+    restart: "no"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app
+
+volumes:
+  redis_data:
